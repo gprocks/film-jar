@@ -1,4 +1,4 @@
-const routeUrl = 'http://api.themoviedb.org/3/'
+const routeUrl = 'https://api.themoviedb.org/3/'
 const apikey = '18474e059b6e87b5879d7626353cb23b'
 function searchMovies(title: string, page: number = 1): Promise<any> {
   return fetch(
