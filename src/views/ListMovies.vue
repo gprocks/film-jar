@@ -9,7 +9,6 @@ const store = useCounterStore()
 const selected = ref(null)
 
 function selectMovie(id: string) {
-  console.log(id)
   selected.value = id
 }
 
@@ -22,7 +21,6 @@ function markAsWatched(movie: Movie) {
   selected.value = null
 }
 function deleteMovie(id: string) {
-  console.log(id)
   store.removeMovie(id)
 }
 </script>
@@ -31,7 +29,7 @@ function deleteMovie(id: string) {
   <div class="list-container">
     <h3>List Movies</h3>
 
-    <div class="list-group">
+    <div v-if="store.movies.length" class="list-group">
       <button
         type="button"
         class="list-group-item list-group-item-action d-flex"
@@ -63,6 +61,7 @@ function deleteMovie(id: string) {
         </div>
       </button>
     </div>
+    <p class="text-white" v-else>Nothing to see here</p>
   </div>
 </template>
 <style scoped type="scss">

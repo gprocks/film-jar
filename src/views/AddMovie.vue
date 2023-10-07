@@ -37,7 +37,6 @@ function nextPage() {
 }
 
 function triggerAction(result) {
-  console.log(result.title, result.id)
   store.addMovie({ name: result.title, tmdbRef: result.id, watched: false })
   toast('Added to the jar', {
     autoClose: 1000,
@@ -46,7 +45,6 @@ function triggerAction(result) {
 }
 
 function isAdded(id) {
-  console.log(store.movies, store.selectedIds)
   return store.selectedIds.includes(id)
 }
 </script>

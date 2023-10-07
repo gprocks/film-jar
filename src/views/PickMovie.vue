@@ -31,7 +31,6 @@ const movie = computed<Movie>(() => {
 watch(
   unwatchedList,
   (newValue) => {
-    console.log(newValue)
     if (selectedMovieId.value === null && newValue.length) {
       pickMovie()
     }
