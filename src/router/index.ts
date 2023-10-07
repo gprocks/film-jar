@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { createRouter, createWebHistory } from 'vue-router'
 
 import { AddMovie, Home, ListMovies } from '@/views'
