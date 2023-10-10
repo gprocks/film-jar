@@ -54,7 +54,7 @@ function isAdded(id) {
   <form @submit.prevent="search">
     <div class="input-group mb-3">
       <input
-        type="text"
+        type="search"
         class="form-control"
         :class="{ 'is-invalid': invalidSearch }"
         placeholder="Movie Title"
