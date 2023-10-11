@@ -1,67 +1,75 @@
 <script setup lang="ts">
 /* import font awesome icon component */
-import { Loader } from '@/components'
-import { Movie } from '@/dto/Movie'
-import { useCounterStore } from '@/stores/counter'
-import { computed, ref, watch } from 'vue'
-import { getMovie } from '@/services/tmdbService'
+import { Loader } from "@/components";
+import { Movie } from "@/dto/Movie";
+import { useCounterStore } from "@/stores/counter";
+import { computed, ref, watch } from "vue";
+import { getMovie } from "@/services/tmdbService";
 
-const store = useCounterStore()
-const loading = ref(true)
-const selectedMovieId = ref<string>(null)
-const movieDetails = ref(null)
-const showposter = ref(false)
+const store = useCounterStore();
+const loading = ref(true);
+const selectedMovieId = ref<string>(null);
+const movieDetails = ref(null);
+const showposter = ref(false);
 watch(selectedMovieId, (val) => {
-  loading.value = true
+  loading.value = true;
   getMovie(val).then((resp) => {
-    movieDetails.value = resp
-    loading.value = false
-  })
-})
+    movieDetails.value = resp;
+    loading.value = false;
+  });
+});
 const canPickAnother = computed<boolean>(() => {
-  return unwatchedList.value.length > 1 || (movie.value.watched && unwatchedList.value.length > 0)
-})
+  return (
+    unwatchedList.value.length > 1 ||
+    (movie.value.watched && unwatchedList.value.length > 0)
+  );
+});
 const unwatchedList = computed<Movie[]>(() => {
-  return store.movies.filter((movie) => !movie.watched)
-})
+  return store.movies.filter((movie) => !movie.watched);
+});
 const movie = computed<Movie>(() => {
-  return store.movies.find((movie) => movie.tmdbRef === selectedMovieId.value)
-})
+  return store.movies.find((movie) => movie.tmdbRef === selectedMovieId.value);
+});
 
 watch(
   unwatchedList,
   (newValue) => {
     if (selectedMovieId.value === null && newValue.length) {
-      pickMovie()
+      pickMovie();
     }
   },
-  { immediate: true }
-)
+  { immediate: true },
+);
 
 function watchMovie() {
-  store.updateWatched(movie.value.tmdbRef, true)
+  store.updateWatched(movie.value.tmdbRef, true);
   setTimeout(() => {
-    showposter.value = true
-  }, 2500)
+    showposter.value = true;
+  }, 2500);
 }
 function pickMovie() {
-  showposter.value = false
+  showposter.value = false;
   if (unwatchedList.value.length > 1) {
     const moviesToChoose = unwatchedList.value.filter(
-      (movie) => movie.tmdbRef !== selectedMovieId.value
-    )
-    const index = Math.floor(Math.random() * moviesToChoose.length)
-    selectedMovieId.value = moviesToChoose[index].tmdbRef
+      (movie) => movie.tmdbRef !== selectedMovieId.value,
+    );
+    const index = Math.floor(Math.random() * moviesToChoose.length);
+    selectedMovieId.value = moviesToChoose[index].tmdbRef;
   } else {
-    selectedMovieId.value = unwatchedList.value[0].tmdbRef
+    selectedMovieId.value = unwatchedList.value[0].tmdbRef;
   }
 }
 </script>
 
 <template>
-  <div v-if="!unwatchedList.length && selectedMovieId === null" class="mt-2 text-center">
-    <p class="text-large">There are no movies left in the jar</p>
-    <RouterLink class="m-2 btn btn-primary" variant="primary" to="AddMovie">Add some</RouterLink>
+  <div
+    v-if="!unwatchedList.length && selectedMovieId === null"
+    class="mt-2 text-center"
+  >
+    <p class="text-large text-white">There are no movies left in the jar</p>
+    <RouterLink class="m-2 btn btn-primary" variant="primary" to="AddMovie"
+      >Add some</RouterLink
+    >
   </div>
   <div v-else>
     <Loader v-if="loading"></Loader>
@@ -127,7 +135,7 @@ h1 {
 }
 
 .movie-title span::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   right: 0;
@@ -139,7 +147,7 @@ h1 {
 }
 
 .movie-title span::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   right: 0;
