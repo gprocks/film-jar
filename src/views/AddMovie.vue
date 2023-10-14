@@ -1,52 +1,72 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { toast } from 'vue3-toastify'
+import { ref, computed, onMounted, onBeforeUnmount } from "vue";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { toast } from "vue3-toastify";
 
-import { useCounterStore } from '@/stores/counter'
-import { Loader } from '@/components'
-import { searchMovies } from '@/services/tmdbService'
+import { useCounterStore } from "@/stores/counter";
+import { Loader } from "@/components";
+import { searchMovies } from "@/services/tmdbService";
 
-const loading = ref(false)
-const paging = ref(false)
-const hasSearched = ref(false)
-const searchTerm = ref('')
-const currentSearch = ref('')
-const searchResult = ref({ results: [], page: 0, total_pages: 0 })
+const loading = ref(false);
+const paging = ref(false);
+const hasSearched = ref(false);
+const searchTerm = ref("");
+const currentSearch = ref("");
+const searchResult = ref({ results: [], page: 0, total_pages: 0 });
 const invalidSearch = computed(() => {
-  return hasSearched.value && searchTerm.value.length < 2
-})
-const store = useCounterStore()
+  return hasSearched.value && searchTerm.value.length < 2;
+});
+const store = useCounterStore();
+const showScrollHome = ref(false);
+
 function search() {
-  hasSearched.value = true
-  currentSearch.value = searchTerm.value
-  loading.value = true
+  hasSearched.value = true;
+  currentSearch.value = searchTerm.value;
+  loading.value = true;
   searchMovies(searchTerm.value).then((res) => {
-    searchResult.value = res
-    loading.value = false
-  })
+    searchResult.value = res;
+    loading.value = false;
+  });
 }
 function nextPage() {
-  paging.value = true
+  paging.value = true;
   searchMovies(currentSearch.value, searchResult.value.page + 1).then((res) => {
-    searchResult.value.page = res.page
-    searchResult.value.total_pages = res.total_pages
-    searchResult.value.results.push(...res.results)
-    paging.value = false
-  })
+    searchResult.value.page = res.page;
+    searchResult.value.total_pages = res.total_pages;
+    searchResult.value.results.push(...res.results);
+    paging.value = false;
+  });
 }
 
 function triggerAction(result) {
-  store.addMovie({ name: result.title, tmdbRef: result.id, watched: false })
-  toast('Added to the jar', {
+  store.addMovie({ name: result.title, tmdbRef: result.id, watched: false });
+  toast("Added to the jar", {
     autoClose: 1000,
-    position: toast.POSITION.BOTTOM_CENTER
-  })
+    position: toast.POSITION.BOTTOM_CENTER,
+  });
 }
 
 function isAdded(id) {
-  return store.selectedIds.includes(id)
+  return store.selectedIds.includes(id);
 }
+
+function handleScroll() {
+  if (window.scrollY > 0) {
+    showScrollHome.value = true;
+  } else {
+    showScrollHome.value = false;
+  }
+}
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+onMounted(() => {
+  window.addEventListener("scroll", handleScroll);
+});
+onBeforeUnmount(() => {
+  window.removeEventListener("scroll", handleScroll);
+});
 </script>
 
 <template>
@@ -62,7 +82,11 @@ function isAdded(id) {
         aria-describedby="Movie Title"
         v-model="searchTerm"
       />
-      <button class="btn btn-success btn-appendage" type="submit" id="btn-search">
+      <button
+        class="btn btn-success btn-appendage"
+        type="submit"
+        id="btn-search"
+      >
         <font-awesome-icon class="fa" icon="fa-solid fa-search" />
       </button>
       <div class="invalid-feedback">You need to search for something!</div>
@@ -115,9 +139,13 @@ function isAdded(id) {
                 </a>
               </div>
               <div class="flex-grow-1 ms-3">
-                <div class="d-flex flex-column bd-highlight mb-3 result-content">
+                <div
+                  class="d-flex flex-column bd-highlight mb-3 result-content"
+                >
                   <div class="">{{ result.overview }}</div>
-                  <div class="mt-auto align-self-end text-muted">{{ result.release_date }}</div>
+                  <div class="mt-auto align-self-end text-muted">
+                    {{ result.release_date }}
+                  </div>
                 </div>
               </div>
             </div>
@@ -125,18 +153,36 @@ function isAdded(id) {
         </div>
         <div
           class="d-grid gap-2 mt-2"
-          v-if="searchResult.total_pages > 1 && searchResult.page < searchResult.total_pages"
+          v-if="
+            searchResult.total_pages > 1 &&
+            searchResult.page < searchResult.total_pages
+          "
         >
-          <button class="btn btn-primary" type="button" @click="nextPage" :disabled="paging">
+          <button
+            class="btn btn-primary"
+            type="button"
+            @click="nextPage"
+            :disabled="paging"
+          >
             Show More
           </button>
         </div>
+        <!-- Back to top button -->
       </div>
       <div v-else>
         <p>Nope, nothing to see here</p>
       </div>
     </div>
   </div>
+  <button
+    type="button"
+    class="btn btn-danger btn-floating btn-lg"
+    :class="showScrollHome ? 'show' : 'hide'"
+    id="btn-back-to-top"
+    @click="scrollToTop"
+  >
+    <font-awesome-icon class="fa" icon="fa-solid fa-arrow-up" />
+  </button>
 </template>
 <style scoped type="scss">
 .search-results {
@@ -180,5 +226,31 @@ p {
 .action-btn {
   margin: 0px;
   padding: 0px;
+}
+
+.btn-floating {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  border-radius: 50%;
+  transition:
+    visibility 0s linear 0.33s,
+    opacity 0.33s linear;
+
+  &:hover {
+    box-shadow: var(
+      0 8px 9px -4px rgba(220, 76, 100, 0.3),
+      0 4px 18px 0 rgba(220, 76, 100, 0.2)
+    );
+  }
+}
+.hide {
+  visibility: hidden;
+  opacity: 0;
+}
+.show {
+  visibility: visible;
+  opacity: 1;
+  transition-delay: 0s;
 }
 </style>
