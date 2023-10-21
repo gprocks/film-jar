@@ -27,6 +27,12 @@ const pwaOptions: Partial<VitePWAOptions> = {
         type: "image/png",
         purpose: "any maskable",
       },
+      {
+        src: "film_192.png", // <== don't add slash, for testing
+        sizes: "192x192",
+        type: "image/png",
+        purpose: "any",
+      },
     ],
   },
 };
