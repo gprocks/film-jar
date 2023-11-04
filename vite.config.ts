@@ -37,7 +37,6 @@ const pwaOptions: Partial<VitePWAOptions> = {
         src: "pwa_144.png", // <== don't add slash, for testing
         sizes: "144x144",
         type: "image/png",
-        purpose: "any",
       },
     ],
   },
