@@ -12,29 +12,29 @@ const pwaOptions: Partial<VitePWAOptions> = {
     theme_color: "#198754",
     icons: [
       {
-        src: "images/pwa_192.png", // <== don't add slash, for testing
+        src: "assets/pwa_192.png", // <== don't add slash, for testing
         sizes: "192x192",
         type: "image/png",
       },
       {
-        src: "/images/pwa_512.png", // <== don't remove slash, for testing
+        src: "/assets/pwa_512.png", // <== don't remove slash, for testing
         sizes: "512x512",
         type: "image/png",
       },
       {
-        src: "images/pwa_512.png", // <== don't add slash, for testing
+        src: "assets/pwa_512.png", // <== don't add slash, for testing
         sizes: "512x512",
         type: "image/png",
         purpose: "any maskable",
       },
       {
-        src: "images/pwa_192.png", // <== don't add slash, for testing
+        src: "assets/pwa_192.png", // <== don't add slash, for testing
         sizes: "192x192",
         type: "image/png",
         purpose: "any",
       },
       {
-        src: "images/pwa_144.png", // <== don't add slash, for testing
+        src: "assets/pwa_144.png", // <== don't add slash, for testing
         sizes: "144x144",
         type: "image/png",
       },
