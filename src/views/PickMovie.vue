@@ -4,7 +4,7 @@ import { Loader } from "@/components";
 import { Movie } from "@/dto/Movie";
 import { useCounterStore } from "@/stores/counter";
 import { computed, ref, watch } from "vue";
-import { getMovie } from "@/services/tmdbService";
+import { getMedia } from "@/services/tmdbService";
 
 const store = useCounterStore();
 const loading = ref(true);
@@ -13,7 +13,7 @@ const movieDetails = ref(null);
 const showposter = ref(false);
 watch(selectedMovieId, (val) => {
   loading.value = true;
-  getMovie(val).then((resp) => {
+  getMedia(val).then((resp) => {
     movieDetails.value = resp;
     loading.value = false;
   });
@@ -91,6 +91,15 @@ function pickMovie() {
         <div v-else>
           <h2 class="text-light">Running Time</h2>
           <h3>{{ movieDetails.runtime }}</h3>
+          <div class="mb-3">
+            <span
+              :key="`div_genre_${genre.name}`"
+              v-for="genre in movieDetails.genres"
+              class="badge rounded-pill text-bg-success me-2 fs-6"
+            >
+              {{ genre.name }}
+            </span>
+          </div>
         </div>
         <div>
           <button

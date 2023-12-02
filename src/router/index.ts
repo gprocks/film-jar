@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { createRouter, createWebHistory } from "vue-router";
 
-import { AddMovie, Home, ListMovies } from "@/views";
+import { AddMovie, Connections, Home, ListMovies } from "@/views";
 import PickMovieVue from "@/views/PickMovie.vue";
 
 const router = createRouter({
@@ -26,6 +26,11 @@ const router = createRouter({
       path: "/PickMovie",
       name: "pickmovie",
       component: PickMovieVue,
+    },
+    {
+      path: "/Connections",
+      name: "connections",
+      component: Connections,
     },
   ],
 });
