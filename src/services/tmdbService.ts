@@ -4,7 +4,7 @@ const routeUrl = "https://api.themoviedb.org/3/";
 const apikey = "18474e059b6e87b5879d7626353cb23b";
 function searchMovies(title: string, page: number = 1): Promise<any> {
   return fetch(
-    `${routeUrl}/search/movie?api_key=${apikey}&query=${encodeURIComponent(
+    `${routeUrl}search/movie?api_key=${apikey}&query=${encodeURIComponent(
       title,
     )}&page=${page}`,
   ).then((resp) => {
@@ -13,7 +13,7 @@ function searchMovies(title: string, page: number = 1): Promise<any> {
 }
 function searchMulti(title: string, page: number = 1) {
   return fetch(
-    `${routeUrl}/search/multi?api_key=${apikey}&query=${encodeURIComponent(
+    `${routeUrl}search/multi?api_key=${apikey}&query=${encodeURIComponent(
       title,
     )}&page=${page}`,
   )
@@ -34,11 +34,19 @@ function getMedia(
 ): Promise<any> {
   let route = `${routeUrl}${type}/${media_id}?api_key=${apikey}`;
   if (includeCredits) {
-    route += "&append_to_response=credits";
+    route += "&append_to_response=aggregate_credits,credits";
   }
-  return fetch(route).then((resp) => {
-    return resp.json();
-  });
+  return fetch(route)
+    .then((resp) => {
+      return resp.json();
+    })
+    .then((data) => {
+      console.log("MOO", data);
+      if (data.aggregate_credits) {
+        data.credits = data.aggregate_credits;
+      }
+      return data;
+    });
 }
 
 export { searchMovies, getMedia, searchMulti };
