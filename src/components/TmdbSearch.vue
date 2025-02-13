@@ -42,12 +42,14 @@ function init() {
 
 function search() {
   hasSearched.value = true;
-  currentSearch.value = searchTerm.value;
-  loading.value = true;
-  getResults().then((res) => {
-    searchResult.value = res;
-    loading.value = false;
-  });
+  if(searchTerm.value) {
+    currentSearch.value = searchTerm.value;
+    loading.value = true;
+    getResults().then((res) => {
+      searchResult.value = res;
+      loading.value = false;
+    });
+  }
 }
 function nextPage() {
   paging.value = true;

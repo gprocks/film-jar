@@ -2,11 +2,11 @@
 /* import font awesome icon component */
 import { Loader } from "@/components";
 import { Movie } from "@/dto/Movie";
-import { useCounterStore } from "@/stores/counter";
+import { useJarStore } from "@/stores/jarStore";
 import { computed, ref, watch } from "vue";
 import { getMedia } from "@/services/tmdbService";
 
-const store = useCounterStore();
+const store = useJarStore();
 const loading = ref(true);
 const selectedMovieId = ref<string>(null);
 const movieDetails = ref(null);
@@ -115,7 +115,7 @@ function pickMovie() {
             variant="primary"
             size="lg"
             :disabled="!canPickAnother"
-            class="m-3 btn btn-primary"
+            class="m-3 btn btn-outline-success"
             @click="pickMovie()"
           >
             Pick Another

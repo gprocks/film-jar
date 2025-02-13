@@ -3,15 +3,29 @@
 import { Movie } from "@/dto/Movie";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { computed, ref } from "vue";
-import { useCounterStore } from "@/stores/counter";
+import { useJarStore } from "@/stores/jarStore";
 import { RouterLink } from "vue-router";
+import { toast } from "vue3-toastify";
 
-const store = useCounterStore();
+export interface Props {
+  jarid: string;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  jarid: null,
+});
+
+const store = useJarStore();
 const showWatched = ref(true);
 const selected = ref(null);
+const sideBarActive = ref(false)
+
+const selectedJar = computed(()=>store.jarConfig[props.jarid])
+
+const isSelectedJar = computed(()=>props.jarid === store.activeJarId);
 
 const moviesDisplay = computed(() => {
-  return [...store.movies]
+  return [...selectedJar.value.contents]
     .filter((movie) => showWatched.value || !movie.watched)
     .sort((a, b) => {
       return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
@@ -27,32 +41,66 @@ function isSelected(id: string) {
 }
 
 function markAsWatched(movie: Movie) {
-  store.updateWatched(movie.tmdbRef, !movie.watched);
+  store.updateWatched(movie.tmdbRef, !movie.watched, props.jarid);
   selected.value = null;
 }
 function deleteMovie(id: string) {
-  store.removeMovie(id);
+  store.removeMovie(id, props.jarid);
+}
+
+function showSidebar(){
+  sideBarActive.value=true;
+}
+
+function setAsActive(){
+  store.setActiveJar(props.jarid)
+  toast(`${selectedJar.value.name} is now the active jar`, {
+    autoClose: 1000,
+    position: toast.POSITION.BOTTOM_CENTER,
+  });
 }
 </script>
 
 <template>
-  <div class="d-flex flex-row justify-content-between bd-highlight text-white">
-    <h3>List Movies</h3>
-    <div class="form-check form-switch">
-      <input
-        class="form-check-input"
-        type="checkbox"
-        role="switch"
-        id="flexSwitchCheckDefault"
-        v-model="showWatched"
-      />
-      <label class="form-check-label text-white" for="flexSwitchCheckDefault"
-        >Include Watched</label
-      >
+  <div v-if="sideBarActive" class="offcanvas offcanvas-end show text-bg-dark" tabindex="-1" id="offcanvasDark" aria-labelledby="offcanvasDarkLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="offcanvasDarkLabel">Options</h5>
+      <button type="button" class="btn-close btn-close-white" aria-label="Close" @click="sideBarActive=false"></button>
     </div>
+    <div class="offcanvas-body">
+      <div class="d-grid gap-2">
+
+      <div class="form-check form-switch">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          role="switch"
+          id="flexSwitchCheckDefault"
+          v-model="showWatched"
+        />
+        <label class="form-check-label text-white" for="flexSwitchCheckDefault"
+          >Include Watched</label
+        >
+      </div>
+      <button class="btn btn-success" @click="setAsActive" :disabled="isSelectedJar">Set as active jar</button>
+      <button class="btn btn-danger" disabled>Delete jar</button>
+
+
+      </div>
+    </div>
+  </div>
+  <div class="d-flex flex-row justify-content-between bd-highlight text-white mb-2">
+    <h3>{{selectedJar?.name}}<font-awesome-icon v-if="isSelectedJar" class="icon text-success ms-2" icon="fa-solid fa-check-circle" /></h3>
+    <button class="btn btn btn-dark" @click="showSidebar" >
+      <font-awesome-icon class="icon" icon="fa-solid fa-gear" />
+    </button>
+    
   </div>
 
   <div class="list-container">
+    <div class="d-grid gap-2 mb-2">
+    <RouterLink class="btn btn-outline-success" :to="{name: 'jar.addmovie'}" >Add Movie</RouterLink>
+  </div>
     <div v-if="moviesDisplay.length" class="list-group">
       <button
         type="button"
@@ -86,10 +134,13 @@ function deleteMovie(id: string) {
       </button>
     </div>
     <div v-else class="mt-2 text-center">
+      <i class="fa-solid fa-otter"></i>
+      <font-awesome-icon
+            class="text-success"
+            icon="fa-solid fa-otter"
+            size="5x"
+          />
       <p class="text-white">Nothing to see here</p>
-      <RouterLink class="m-2 btn btn-primary" variant="primary" to="AddMovie"
-        >Add Movies</RouterLink
-      >
     </div>
   </div>
 </template>
