@@ -4,7 +4,7 @@ import { Movie } from "@/dto/Movie";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { computed, ref } from "vue";
 import { useJarStore } from "@/stores/jarStore";
-import { RouterLink } from "vue-router";
+import { RouterLink, useRouter } from "vue-router";
 import { toast } from "vue3-toastify";
 import { onClickOutside } from "@vueuse/core";
 
@@ -16,6 +16,7 @@ const props = withDefaults(defineProps<Props>(), {
   jarid: null,
 });
 
+const router = useRouter();
 const store = useJarStore();
 const showWatched = ref(true);
 const selected = ref(null);
@@ -24,6 +25,8 @@ const htmlsidebarelement = ref(null);
 
 const editNameIsVisible = ref(false);
 const editJarName = ref("");
+
+const deleteConfirmationIsVisible = ref(false);
 
 const selectedJar = computed(() => store.jarConfig[props.jarid]);
 
@@ -37,7 +40,7 @@ const moviesDisplay = computed(() => {
     });
 });
 
-onClickOutside(htmlsidebarelement, (event) => {
+onClickOutside(htmlsidebarelement, () => {
   sideBarActive.value = false;
 });
 
@@ -59,6 +62,7 @@ function deleteMovie(id: string) {
 
 function showSidebar() {
   editNameIsVisible.value = false;
+  deleteConfirmationIsVisible.value = false;
   sideBarActive.value = true;
 }
 
@@ -78,6 +82,15 @@ function showEditJarName() {
 function updateJarName() {
   selectedJar.value.name = editJarName.value;
   editNameIsVisible.value = false;
+}
+
+function deleteJar() {
+  store.deleteJar(props.jarid);
+  toast(`$Jar removed`, {
+    autoClose: 1000,
+    position: toast.POSITION.BOTTOM_CENTER,
+  });
+  router.push({ name: "jarsConfig" });
 }
 </script>
 
@@ -143,7 +156,32 @@ function updateJarName() {
         >
           Set as active jar
         </button>
-        <button class="btn btn-danger" disabled>Delete jar</button>
+        <button
+          class="btn btn-danger"
+          v-if="!deleteConfirmationIsVisible"
+          @click="deleteConfirmationIsVisible = true"
+        >
+          Delete jar
+        </button>
+        <div class="d-grid gap-2" v-else>
+          <div>Are you sure you wish to remove this jar forever!?</div>
+          <div
+            class="btn-group"
+            role="group"
+            aria-label="Basic mixed styles example"
+          >
+            <button type="button" class="btn btn-success" @click="deleteJar">
+              Kill it
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline-success"
+              @click="deleteConfirmationIsVisible = false"
+            >
+              Let it live
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>

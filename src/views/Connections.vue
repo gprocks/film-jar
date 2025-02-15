@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { toast } from "vue3-toastify";
-
 import { computed, ref } from "vue";
 import { MediaType, SearchType } from "@/dto/TMDBSearch";
 import { TmdbSearch } from "@/components";
@@ -102,6 +100,4 @@ function removeItem(mediaItem) {
     </div>
   </div>
 </template>
-<style scoped type="scss">
-
-</style>
+<style scoped type="scss"></style>

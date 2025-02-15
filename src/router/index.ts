@@ -26,21 +26,22 @@ const router = createRouter({
       path: "/jar/:jarid",
       name: "jar",
       redirect: {
-        name: 'listmovies'
+        name: "listmovies",
       },
-      children:[
+      children: [
         {
           path: "",
           name: "listmovies",
           component: ListMovies,
-          props:true,
+          props: true,
         },
         {
           path: "AddMovie",
           name: "jar.addmovie",
           component: AddMovie,
-          props:true,
-        }]
+          props: true,
+        },
+      ],
     },
     {
       path: "/PickMovie",
