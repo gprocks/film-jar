@@ -22,6 +22,9 @@ const selected = ref(null);
 const sideBarActive = ref(false);
 const htmlsidebarelement = ref(null);
 
+const editNameIsVisible = ref(false);
+const editJarName = ref("");
+
 const selectedJar = computed(() => store.jarConfig[props.jarid]);
 
 const isSelectedJar = computed(() => props.jarid === store.activeJarId);
@@ -35,7 +38,6 @@ const moviesDisplay = computed(() => {
 });
 
 onClickOutside(htmlsidebarelement, (event) => {
-  console.log("AHA");
   sideBarActive.value = false;
 });
 
@@ -56,6 +58,7 @@ function deleteMovie(id: string) {
 }
 
 function showSidebar() {
+  editNameIsVisible.value = false;
   sideBarActive.value = true;
 }
 
@@ -65,6 +68,16 @@ function setAsActive() {
     autoClose: 1000,
     position: toast.POSITION.BOTTOM_CENTER,
   });
+}
+
+function showEditJarName() {
+  editJarName.value = selectedJar.value.name;
+  editNameIsVisible.value = true;
+}
+
+function updateJarName() {
+  selectedJar.value.name = editJarName.value;
+  editNameIsVisible.value = false;
 }
 </script>
 
@@ -88,6 +101,27 @@ function setAsActive() {
     </div>
     <div class="offcanvas-body">
       <div class="d-grid gap-2">
+        <div v-if="!editNameIsVisible">
+          <span>{{ selectedJar.name }}</span>
+          <button class="btn btn btn-dark" @click="showEditJarName">
+            <font-awesome-icon :icon="['fas', 'pencil']" class="text-success" />
+          </button>
+        </div>
+        <div class="input-group" v-else>
+          <input class="form-control form-control-sm" v-model="editJarName" />
+
+          <button class="btn btn-success" type="button" @click="updateJarName">
+            <font-awesome-icon :icon="['fas', 'floppy-disk']" />
+          </button>
+          <button
+            class="btn btn-danger"
+            type="button"
+            @click="editNameIsVisible = false"
+          >
+            <font-awesome-icon :icon="['fas', 'xmark']" />
+          </button>
+        </div>
+
         <div class="form-check form-switch">
           <input
             class="form-check-input"
