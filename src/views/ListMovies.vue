@@ -6,6 +6,7 @@ import { computed, ref } from "vue";
 import { useJarStore } from "@/stores/jarStore";
 import { RouterLink } from "vue-router";
 import { toast } from "vue3-toastify";
+import { onClickOutside } from "@vueuse/core";
 
 export interface Props {
   jarid: string;
@@ -19,6 +20,7 @@ const store = useJarStore();
 const showWatched = ref(true);
 const selected = ref(null);
 const sideBarActive = ref(false);
+const htmlsidebarelement = ref(null);
 
 const selectedJar = computed(() => store.jarConfig[props.jarid]);
 
@@ -30,6 +32,11 @@ const moviesDisplay = computed(() => {
     .sort((a, b) => {
       return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
     });
+});
+
+onClickOutside(htmlsidebarelement, (event) => {
+  console.log("AHA");
+  sideBarActive.value = false;
 });
 
 function selectMovie(id: string) {
@@ -63,6 +70,7 @@ function setAsActive() {
 
 <template>
   <div
+    ref="htmlsidebarelement"
     v-if="sideBarActive"
     class="offcanvas offcanvas-end show text-bg-dark"
     tabindex="-1"
