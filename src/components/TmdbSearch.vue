@@ -42,7 +42,7 @@ function init() {
 
 function search() {
   hasSearched.value = true;
-  if(searchTerm.value) {
+  if (searchTerm.value) {
     currentSearch.value = searchTerm.value;
     loading.value = true;
     getResults().then((res) => {

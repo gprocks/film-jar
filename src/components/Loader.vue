@@ -18,7 +18,7 @@
   animation: pulse 1s linear infinite;
 }
 .loader:after {
-  content: '';
+  content: "";
   position: absolute;
   width: 48px;
   height: 48px;
