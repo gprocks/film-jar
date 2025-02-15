@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { createRouter, createWebHistory } from "vue-router";
 
-import { AddMovie, Connections, Home, ListMovies } from "@/views";
+import { AddMovie, Connections, Home, ListMovies, JarsConfig } from "@/views";
 import PickMovieVue from "@/views/PickMovie.vue";
 
 const router = createRouter({
@@ -13,14 +13,34 @@ const router = createRouter({
       component: Home,
     },
     {
+      path: "/Jars",
+      name: "jarsConfig",
+      component: JarsConfig,
+    },
+    {
       path: "/AddMovie",
       name: "addmovie",
       component: AddMovie,
     },
     {
-      path: "/ListMovies",
-      name: "listmovies",
-      component: ListMovies,
+      path: "/jar/:jarid",
+      name: "jar",
+      redirect: {
+        name: 'listmovies'
+      },
+      children:[
+        {
+          path: "",
+          name: "listmovies",
+          component: ListMovies,
+          props:true,
+        },
+        {
+          path: "AddMovie",
+          name: "jar.addmovie",
+          component: AddMovie,
+          props:true,
+        }]
     },
     {
       path: "/PickMovie",
