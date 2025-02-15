@@ -41,7 +41,6 @@ function getMedia(
       return resp.json();
     })
     .then((data) => {
-      console.log("MOO", data);
       if (data.aggregate_credits) {
         data.credits = data.aggregate_credits;
       }

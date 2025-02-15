@@ -24,7 +24,10 @@ import {
   faLink,
   faJar,
   faOtter,
-  faGear
+  faGear,
+  faPencil,
+  faFloppyDisk,
+  faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { useJarStore } from "./stores/jarStore";
 
@@ -43,7 +46,10 @@ library.add(
   faLink,
   faJar,
   faOtter,
-  faGear
+  faGear,
+  faPencil,
+  faFloppyDisk,
+  faXmark,
 );
 
 const app = createApp(App);
