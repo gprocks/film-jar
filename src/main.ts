@@ -30,6 +30,7 @@ import {
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { useJarStore } from "./stores/jarStore";
+import { useWatchlistStore } from "./stores/watchlistStore";
 
 /* add icons to the library */
 library.add(
@@ -58,4 +59,5 @@ app.use(createPinia());
 app.use(router);
 const store = useJarStore();
 store.init();
+useWatchlistStore();
 app.mount("#app");
