@@ -45,6 +45,15 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
           </div>
           <span class="h4">Connections</span>
         </router-link>
+        <router-link
+          :to="{ name: 'configuration' }"
+          class="btn btn-outline-success p-4"
+        >
+          <div>
+            <font-awesome-icon :icon="['fas', 'gear']" />
+          </div>
+          <span class="h4">Config</span>
+        </router-link>
       </div>
     </div>
   </div>
