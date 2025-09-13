@@ -28,6 +28,7 @@ import {
   faPencil,
   faFloppyDisk,
   faXmark,
+  faFileImport,
 } from "@fortawesome/free-solid-svg-icons";
 import { useJarStore } from "./stores/jarStore";
 import { useWatchlistStore } from "./stores/watchlistStore";
@@ -50,6 +51,7 @@ library.add(
   faGear,
   faPencil,
   faFloppyDisk,
+  faFileImport,
   faXmark,
 );
 

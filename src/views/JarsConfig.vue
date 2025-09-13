@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { useJarStore } from "@/stores/jarStore";
 import { ref } from "vue";
 import { storeToRefs } from "pinia";
+import { AppConfig } from "@/dto";
 
 const store = useJarStore();
 const { activeJarId } = storeToRefs(store);
@@ -19,10 +20,7 @@ function showAddForm() {
 
 function addJar() {
   store.addJar(newJarName.value);
-  toast(`${newJarName.value} created`, {
-    autoClose: 1000,
-    position: toast.POSITION.BOTTOM_CENTER,
-  });
+  toast(`${newJarName.value} created`, AppConfig.defaultToastSettings);
   addFormIsVisible.value = false;
 }
 </script>

@@ -7,6 +7,7 @@ import { useJarStore } from "@/stores/jarStore";
 import { RouterLink, useRouter } from "vue-router";
 import { toast } from "vue3-toastify";
 import { onClickOutside } from "@vueuse/core";
+import { AppConfig } from "@/dto";
 
 export interface Props {
   jarid: string;
@@ -68,10 +69,10 @@ function showSidebar() {
 
 function setAsActive() {
   store.setActiveJar(props.jarid);
-  toast(`${selectedJar.value.name} is now the active jar`, {
-    autoClose: 1000,
-    position: toast.POSITION.BOTTOM_CENTER,
-  });
+  toast(
+    `${selectedJar.value.name} is now the active jar`,
+    AppConfig.defaultToastSettings,
+  );
 }
 
 function showEditJarName() {
@@ -86,10 +87,7 @@ function updateJarName() {
 
 function deleteJar() {
   store.deleteJar(props.jarid);
-  toast(`$Jar removed`, {
-    autoClose: 1000,
-    position: toast.POSITION.BOTTOM_CENTER,
-  });
+  toast(`$Jar removed`, AppConfig.defaultToastSettings);
   router.push({ name: "jarsConfig" });
 }
 </script>

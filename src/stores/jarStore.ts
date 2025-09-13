@@ -74,6 +74,9 @@ export const useJarStore = defineStore("jarStore", () => {
       }
     }
   }
+  function bulkAdd(jars: Jar[]) {
+    jars.forEach((j) => addJar(j.name, [...j.contents]));
+  }
   return {
     jarConfig,
     movies,
@@ -87,5 +90,6 @@ export const useJarStore = defineStore("jarStore", () => {
     editJar,
     deleteJar,
     setActiveJar,
+    bulkAdd,
   };
 });
