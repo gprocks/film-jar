@@ -10,12 +10,14 @@ export interface Props {
   searchType?: SearchType;
   disableList?: string[];
   placeholderText?: string;
+  actionIcon?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   searchType: SearchType.Movies,
   disableList: () => [],
   placeholderText: "Movie Title",
+  actionIcon: "fa-circle-plus",
 });
 
 const loading = ref(false);
@@ -136,7 +138,7 @@ onBeforeUnmount(() => {
               >
                 <font-awesome-icon
                   class="fa-2x text-primary action-icon"
-                  icon="fa-solid fa-circle-plus"
+                  :icon="`fa-solid ${actionIcon}`"
                 />
               </button>
               <font-awesome-icon
