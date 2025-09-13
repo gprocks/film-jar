@@ -29,6 +29,7 @@ import {
   faFloppyDisk,
   faXmark,
   faFileImport,
+  faClock,
 } from "@fortawesome/free-solid-svg-icons";
 import { useJarStore } from "./stores/jarStore";
 import { useWatchlistStore } from "./stores/watchlistStore";
@@ -53,6 +54,7 @@ library.add(
   faFloppyDisk,
   faFileImport,
   faXmark,
+  faClock,
 );
 
 const app = createApp(App);

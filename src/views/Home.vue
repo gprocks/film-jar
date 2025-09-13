@@ -46,6 +46,15 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
           <span class="h4">Connections</span>
         </router-link>
         <router-link
+          :to="{ name: 'runtime' }"
+          class="btn btn-outline-success p-4"
+        >
+          <div>
+            <font-awesome-icon :icon="['fas', 'clock']" />
+          </div>
+          <span class="h4">Runtime Check</span>
+        </router-link>
+        <router-link
           :to="{ name: 'configuration' }"
           class="btn btn-outline-success p-4"
         >
