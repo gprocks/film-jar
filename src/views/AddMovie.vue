@@ -4,6 +4,7 @@ import { toast } from "vue3-toastify";
 import { useJarStore } from "@/stores/jarStore";
 import { TmdbSearch } from "@/components";
 import { computed, ref } from "vue";
+import { AppConfig } from "@/dto";
 
 const store = useJarStore();
 
@@ -35,10 +36,7 @@ function triggerAction(result) {
     { name: result.title, tmdbRef: result.id, watched: false },
     selectedJarRef.value,
   );
-  toast(`${result.title} added to jar`, {
-    autoClose: 1000,
-    position: toast.POSITION.BOTTOM_CENTER,
-  });
+  toast(`${result.title} added to jar`, AppConfig.defaultToastSettings);
 }
 </script>
 
