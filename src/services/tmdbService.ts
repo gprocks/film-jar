@@ -28,7 +28,7 @@ function searchMulti(title: string, page: number = 1) {
     });
 }
 function getMedia(
-  media_id: string,
+  media_id: number,
   type: MediaType = MediaType.Movie,
   includeCredits = false,
 ): Promise<any> {
@@ -48,4 +48,15 @@ function getMedia(
     });
 }
 
-export { searchMovies, getMedia, searchMulti };
+function getProviders(media_id: number, locale = "GB") {
+  const route = `${routeUrl}movie/${media_id}/watch/providers?api_key=${apikey}`;
+  return fetch(route)
+    .then((resp) => {
+      return resp.json();
+    })
+    .then((providerData) => {
+      return providerData["results"][locale];
+    });
+}
+
+export { searchMovies, getMedia, searchMulti, getProviders };

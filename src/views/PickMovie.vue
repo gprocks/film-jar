@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /* import font awesome icon component */
-import { Loader } from "@/components";
+import { Loader, MovieDetail } from "@/components";
 import { Movie } from "@/dto/Movie";
 import { useJarStore } from "@/stores/jarStore";
 import { computed, ref, watch } from "vue";
@@ -8,9 +8,10 @@ import { getMedia } from "@/services/tmdbService";
 
 const store = useJarStore();
 const loading = ref(true);
-const selectedMovieId = ref<string>(null);
+const selectedMovieId = ref<number>(null);
 const movieDetails = ref(null);
-const showposter = ref(false);
+const showDetail = ref(false);
+
 watch(selectedMovieId, (val) => {
   loading.value = true;
   getMedia(val).then((resp) => {
@@ -43,12 +44,15 @@ watch(
 
 function watchMovie() {
   store.updateWatched(movie.value.tmdbRef, true);
-  setTimeout(() => {
-    showposter.value = true;
-  }, 2500);
+  showDetail.value = true;
+}
+
+function returnMovie() {
+  store.updateWatched(movie.value.tmdbRef, false);
+  pickMovie();
 }
 function pickMovie() {
-  showposter.value = false;
+  showDetail.value = false;
   if (unwatchedList.value.length > 1) {
     const moviesToChoose = unwatchedList.value.filter(
       (movie) => movie.tmdbRef !== selectedMovieId.value,
@@ -75,33 +79,20 @@ function pickMovie() {
     <Loader v-if="loading"></Loader>
     <div v-else>
       <h3 class="mb-3">Pick a Movie</h3>
-      <div class="text-center">
-        <h1 v-if="movie.watched" class="movie-title">
-          <span>{{ movie.name }}</span>
-        </h1>
-        <h1 v-else class="movie-placeholder">No Peeking</h1>
-        <div v-if="showposter">
-          <img
-            v-if="movieDetails.poster_path"
-            :src="`https://image.tmdb.org/t/p/w185${movieDetails.poster_path}`"
-            alt="movie image"
+      <div>
+        <Loader v-if="loading" />
+        <div class="text-center" v-else>
+          <h1 v-if="movie.watched" class="movie-title">
+            <span>{{ movieDetails.title }}</span>
+          </h1>
+          <h1 v-else class="movie-placeholder">No Peeking</h1>
+          <MovieDetail
+            :movie-detail="movieDetails"
+            :hide-detail="!showDetail"
           />
-          <img v-else src="../assets/placeholder.jpg" />
         </div>
-        <div v-else>
-          <h2 class="text-light">Running Time</h2>
-          <h3>{{ movieDetails.runtime }}</h3>
-          <div class="mb-3">
-            <span
-              :key="`div_genre_${genre.name}`"
-              v-for="genre in movieDetails.genres"
-              class="badge rounded-pill text-bg-success me-2 fs-6"
-            >
-              {{ genre.name }}
-            </span>
-          </div>
-        </div>
-        <div>
+
+        <div class="text-center">
           <button
             variant="success"
             size="lg"
@@ -120,12 +111,21 @@ function pickMovie() {
           >
             Pick Another
           </button>
+          <button
+            v-if="movie.watched"
+            variant="primary"
+            size="lg"
+            class="m-3 btn btn-outline-success"
+            @click="returnMovie()"
+          >
+            Not Today
+          </button>
         </div>
       </div>
     </div>
   </div>
 </template>
-<style scoped type="scss">
+<style type="scss" scoped>
 .movie-placeholder {
   color: #222;
 }
@@ -135,7 +135,6 @@ h1 {
   font-weight: normal;
 }
 
-/* title styles */
 .movie-title span {
   position: relative;
   overflow: hidden;
