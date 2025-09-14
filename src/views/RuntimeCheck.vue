@@ -1,16 +1,12 @@
 <script setup lang="ts">
 import { SearchType } from "@/dto/TMDBSearch";
-import { TmdbSearch } from "@/components";
+import { MovieDetail, TmdbSearch } from "@/components";
 import { ref } from "vue";
 import { getMedia } from "@/services/tmdbService";
+import { Helper, ITMDBMovieDetail } from "@/dto";
 
 const loading = ref(false);
-let selectedFilm = ref<{
-  title: string;
-  runtime: number;
-  poster_path: string;
-  overview: string;
-}>(null);
+let selectedFilm = ref<ITMDBMovieDetail>(null);
 
 function selectFilm(result) {
   loading.value = true;
@@ -27,23 +23,12 @@ function selectFilm(result) {
     placeholderText="Search"
     action-icon="fa-eye"
     @media-selected="selectFilm"
-    ><div class="text-center" v-if="selectedFilm">
-      <div class="text-white">{{ selectedFilm.title }}</div>
-      <div>
-        <img
-          v-if="selectedFilm.poster_path"
-          :src="`https://image.tmdb.org/t/p/w185${selectedFilm.poster_path}`"
-          alt="movie image"
-        />
-        <img v-else src="../assets/placeholder.jpg" />
-      </div>
-      <div class="text-white">
-        {{ Math.floor(selectedFilm.runtime / 60) }}:{{
-          (selectedFilm.runtime % 60).toString().padStart(2, "0")
-        }}
-      </div>
-      <div class="text-white">{{ selectedFilm.overview }}</div>
-    </div></tmdb-search
-  >
+  />
+  <div class="text-center" v-if="selectedFilm">
+    <h1 class="movie-title">
+      <span>{{ selectedFilm.title }}</span>
+    </h1>
+    <MovieDetail :movie-detail="selectedFilm" :hide-detail="false" />
+  </div>
 </template>
 <style scoped type="scss"></style>

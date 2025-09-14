@@ -45,11 +45,11 @@ onClickOutside(htmlsidebarelement, () => {
   sideBarActive.value = false;
 });
 
-function selectMovie(id: string) {
+function selectMovie(id: number) {
   selected.value = id;
 }
 
-function isSelected(id: string) {
+function isSelected(id: number) {
   return selected.value == id;
 }
 
@@ -57,7 +57,7 @@ function markAsWatched(movie: Movie) {
   store.updateWatched(movie.tmdbRef, !movie.watched, props.jarid);
   selected.value = null;
 }
-function deleteMovie(id: string) {
+function deleteMovie(id: number) {
   store.removeMovie(id, props.jarid);
 }
 

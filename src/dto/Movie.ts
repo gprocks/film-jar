@@ -1,16 +1,16 @@
 export interface IMovie {
-  tmdbRef: string;
+  tmdbRef: number;
   name: string;
   watched: boolean;
 }
 
 export class Movie implements IMovie {
-  tmdbRef: string;
+  tmdbRef: number;
   name: string;
   watched: boolean;
 
   constructor() {
-    this.tmdbRef = "";
+    this.tmdbRef = null;
     this.name = "";
     this.watched = false;
   }

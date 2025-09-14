@@ -38,14 +38,14 @@ export const useJarStore = defineStore("jarStore", () => {
     const selectedJar = jarConfig.value[jarId || activeJarId.value];
     selectedJar.contents.push(movie);
   }
-  function removeMovie(id: string, jarId: string = "") {
+  function removeMovie(id: number, jarId: string = "") {
     const selectedJar = jarConfig.value[jarId || activeJarId.value];
     const index = selectedJar.contents.findIndex((x) => x.tmdbRef === id);
     if (index > -1) {
       selectedJar.contents.splice(index, 1);
     }
   }
-  function updateWatched(id: string, val: boolean, jarId: string = "") {
+  function updateWatched(id: number, val: boolean, jarId: string = "") {
     const selectedJar = jarConfig.value[jarId || activeJarId.value];
     const movie = selectedJar.contents.find((x) => x.tmdbRef === id);
     movie.watched = val;
